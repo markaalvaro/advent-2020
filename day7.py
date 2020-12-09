@@ -34,9 +34,13 @@ def count_nested_bags_recursive(current_bag, current_bag_count, bags, memo):
     count = current_bag_count
     if len(bags[current_bag]) > 0:
         for sub_bag in bags[current_bag]:
-            sub_bag_count = count_nested_bags_recursive(str(sub_bag[2:len(sub_bag)]), int(str(sub_bag[0:1])), bags, memo)
-            memo[str(sub_bag[2:len(sub_bag)])] = int(sub_bag_count / int(str(sub_bag[0:1])))
-            count += (current_bag_count * sub_bag_count)
+            sub_bag_name = str(sub_bag[2:len(sub_bag)])
+            sub_bag_count = int(str(sub_bag[0:1]))
+
+            sub_bag_nested_count = count_nested_bags_recursive(sub_bag_name, sub_bag_count, bags, memo)
+            
+            memo[sub_bag_name] = int(sub_bag_nested_count / sub_bag_count)
+            count += (current_bag_count * sub_bag_nested_count)
 
     return count
 
@@ -50,8 +54,7 @@ def count_nested_bags(rules):
         else:
             bags[rule_fragments[0]] = rule_fragments[1:len(rule_fragments)]
 
-    memo = {}
-    return count_nested_bags_recursive("shiny gold bag", 1, bags, memo)
+    return count_nested_bags_recursive("shiny gold bag", 1, bags, {})
 
 
 with open('day7_input.txt', 'r') as file:
