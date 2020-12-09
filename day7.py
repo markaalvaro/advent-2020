@@ -27,7 +27,34 @@ def count_gold_bag_containers(rules):
             count += 1
     return count
 
+def count_nested_bags_recursive(current_bag, current_bag_count, bags, memo):
+    if current_bag in memo:
+        return current_bag_count * memo[current_bag]
+    
+    count = current_bag_count
+    if len(bags[current_bag]) > 0:
+        for sub_bag in bags[current_bag]:
+            sub_bag_count = count_nested_bags_recursive(str(sub_bag[2:len(sub_bag)]), int(str(sub_bag[0:1])), bags, memo)
+            memo[str(sub_bag[2:len(sub_bag)])] = int(sub_bag_count / int(str(sub_bag[0:1])))
+            count += (current_bag_count * sub_bag_count)
+
+    return count
+
+
+def count_nested_bags(rules):
+    bags = {}
+    for rule in rules:
+        rule_fragments = re.findall(r'\d* ?\w+ \w+ bag', rule)
+        if rule_fragments[1] == " no other bag":
+            bags[rule_fragments[0]] = []
+        else:
+            bags[rule_fragments[0]] = rule_fragments[1:len(rule_fragments)]
+
+    memo = {}
+    return count_nested_bags_recursive("shiny gold bag", 1, bags, memo)
+
 
 with open('day7_input.txt', 'r') as file:
     rules = file.read().split('\n')
     print(count_gold_bag_containers(rules))
+    print(count_nested_bags(rules) - 1)
