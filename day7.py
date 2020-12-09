@@ -30,4 +30,4 @@ def count_gold_bag_containers(rules):
 
 with open('day7_input.txt', 'r') as file:
     rules = file.read().split('\n')
-    print(count_potential_bag_containers(rules))
+    print(count_gold_bag_containers(rules))
