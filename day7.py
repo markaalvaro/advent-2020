@@ -38,7 +38,7 @@ def count_nested_bags_recursive(current_bag, current_bag_count, bags, memo):
             sub_bag_count = int(str(sub_bag[0:1]))
 
             sub_bag_nested_count = count_nested_bags_recursive(sub_bag_name, sub_bag_count, bags, memo)
-            
+
             memo[sub_bag_name] = int(sub_bag_nested_count / sub_bag_count)
             count += (current_bag_count * sub_bag_nested_count)
 
